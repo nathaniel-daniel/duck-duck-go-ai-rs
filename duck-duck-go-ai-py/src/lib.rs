@@ -80,9 +80,21 @@ impl Chat {
     pub fn __getitem__<'a>(
         &self,
         py: Python<'a>,
-        index: usize,
+        mut index: isize,
     ) -> PyResult<Option<(Bound<'a, PyString>, Bound<'a, PyString>)>> {
         let chat_request = self.get_chat_request().context("chat is busy")?;
+
+        let messages_len = chat_request.messages.len();
+        if index < 0 {
+            index += messages_len as isize;
+        }
+        let index = match usize::try_from(index) {
+            Ok(index) => index,
+            Err(_err) => {
+                return Err(PyIndexError::new_err("message index out of range"));
+            }
+        };
+
         let message = match chat_request.messages.get(index) {
             Some(message) => message,
             None => {
@@ -209,6 +221,19 @@ impl Chat {
         })?;
 
         Ok(ChatResponseStream { rx })
+    }
+
+    pub fn __str__(&self) -> String {
+        let chat_request = self.get_chat_request();
+        match chat_request {
+            Some(chat_request) => {
+                format!(
+                    "Chat(messages={:?}, model={:?})",
+                    chat_request.messages, chat_request.model
+                )
+            }
+            None => "Chat(<chat is busy>)".to_string(),
+        }
     }
 }
 
