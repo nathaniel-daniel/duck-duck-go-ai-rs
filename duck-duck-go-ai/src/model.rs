@@ -70,14 +70,14 @@ pub struct ChatResponseMessage {
 
 /// A response stream for a chat.
 pub struct ChatResponseStream {
-    stream: Pin<Box<dyn Stream<Item = Result<SseEvent, SseCodecError>>>>,
+    stream: Pin<Box<dyn Stream<Item = Result<SseEvent, SseCodecError>> + Send>>,
     done: bool,
 }
 
 impl ChatResponseStream {
     /// Create a new [`ChatResponseStream`].
     pub(crate) fn new(
-        stream: Pin<Box<dyn Stream<Item = Result<SseEvent, SseCodecError>>>>,
+        stream: Pin<Box<dyn Stream<Item = Result<SseEvent, SseCodecError>> + Send>>,
     ) -> Self {
         Self {
             stream,

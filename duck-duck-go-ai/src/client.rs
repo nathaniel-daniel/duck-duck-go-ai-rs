@@ -53,7 +53,7 @@ impl Client {
     }
 
     /// Chat with an AI.
-    pub async fn chat(&self, request: &mut ChatRequest) -> Result<ChatResponseStream, Error> {
+    pub async fn chat(&self, request: &ChatRequest) -> Result<ChatResponseStream, Error> {
         let url = "https://duckduckgo.com/duckchat/v1/chat";
 
         let response = self

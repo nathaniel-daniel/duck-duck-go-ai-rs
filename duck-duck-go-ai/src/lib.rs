@@ -53,7 +53,7 @@ mod test {
         request.model = "mistralai/Mixtral-8x7B-Instruct-v0.1".into();
 
         let mut stream = client
-            .chat(&mut request)
+            .chat(&request)
             .await
             .expect("failed to send chat request");
         let message = stream
