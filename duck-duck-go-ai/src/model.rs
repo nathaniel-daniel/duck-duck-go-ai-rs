@@ -50,10 +50,10 @@ pub struct ChatMessage {
 #[derive(Debug, serde::Deserialize, serde::Serialize)]
 pub struct ChatResponseMessage {
     /// The role.
-    pub role: String,
+    pub role: Option<String>,
 
     /// The message part.
-    pub message: String,
+    pub message: Option<String>,
 
     /// The time the message was created?
     pub created: u64,
@@ -93,8 +93,13 @@ impl ChatResponseStream {
         while let Some(message) = self.next().await {
             let message = message?;
 
-            role = Some(message.role);
-            content.push_str(&message.message);
+            if let Some(message_role) = message.role {
+                role = Some(message_role);
+            }
+
+            if let Some(message) = message.message {
+                content.push_str(&message);
+            }
         }
 
         // TODO: Throw error if not done?

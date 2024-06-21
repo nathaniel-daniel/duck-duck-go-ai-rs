@@ -62,4 +62,24 @@ mod test {
             .expect("failed to collect message");
         dbg!(message);
     }
+
+    #[tokio::test]
+    async fn it_works_gpt() {
+        let client = Client::new();
+        let mut request = client.init_chat().await.expect("failed to init chat");
+        request.messages.push(ChatMessage {
+            role: "user".into(),
+            content: "Hello! How are you today?".into(),
+        });
+
+        let mut stream = client
+            .chat(&request)
+            .await
+            .expect("failed to send chat request");
+        let message = stream
+            .collect_into_chat_message()
+            .await
+            .expect("failed to collect message");
+        dbg!(message);
+    }
 }
