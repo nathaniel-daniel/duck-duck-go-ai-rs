@@ -162,11 +162,15 @@ impl Chat {
                     let message_result = message_result.context("failed to parse event");
                     match message_result {
                         Ok(message) => {
-                            role = Some(message.role);
-                            content.push_str(&message.message);
+                            if let Some(message_role) = message.role {
+                                role = Some(message_role);
+                            }
+                            if let Some(message) = message.message {
+                                content.push_str(&message);
 
-                            // We need to keep processing even if we got cancelled.
-                            let _ = tx.send(Ok(message.message)).is_ok();
+                                // We need to keep processing even if we got cancelled.
+                                let _ = tx.send(Ok(message)).is_ok();
+                            }
                         }
                         Err(error) => {
                             // The error might be fatal.
