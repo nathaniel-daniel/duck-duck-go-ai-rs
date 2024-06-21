@@ -1,5 +1,6 @@
 [workspace]
 resolver = "2"
 members = [
-    "duck-duck-go-ai"
+    "duck-duck-go-ai",
+    "duck-duck-go-ai-py",
 ]
