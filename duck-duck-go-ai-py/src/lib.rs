@@ -96,8 +96,6 @@ impl Chat {
         Ok(Some((role, content)))
     }
 
-    // We want to manually restore chat state if an error occurs.
-    #[warn(clippy::question_mark_used)]
     /// Create a user message and get the response.
     pub fn send_message(&self, content: &str) -> PyResult<ChatResponseStream> {
         struct ChatRequestGuard {
