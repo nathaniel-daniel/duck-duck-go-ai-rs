@@ -1,0 +1,1 @@
+window.ALL_CRATES = ["duck_duck_go_ai","duck_duck_go_ai_py"];
