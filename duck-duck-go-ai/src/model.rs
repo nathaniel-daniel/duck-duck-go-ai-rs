@@ -17,12 +17,19 @@ pub struct ChatRequest {
     /// The model.
     ///
     /// Valid Choices:
-    /// * "gpt-3.5-turbo-0125"
-    /// * "gpt-4"
     /// * "claude-3-haiku-20240307"
     /// * "claude-3-sonnet-20240229"
-    /// * "meta-llama/Llama-3-70b-chat-hf"
+    /// * "claude-3-5-sonnet-20240620"
+    /// * "meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo"
     /// * "mistralai/Mixtral-8x7B-Instruct-v0.1"
+    /// * "gpt-4o-mini"
+    /// * "gpt-4o"
+    ///
+    /// These choices were valid in the past,
+    /// but seem to no longer work:
+    /// * "meta-llama/Llama-3-70b-chat-hf"
+    /// * "gpt-3.5-turbo-0125"
+    /// * "gpt-4"
     pub model: String,
 
     /// A vqd token.
