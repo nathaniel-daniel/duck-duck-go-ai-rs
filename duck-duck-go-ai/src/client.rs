@@ -7,6 +7,8 @@ use tokio_util::codec::FramedRead;
 use tokio_util::io::StreamReader;
 
 static USER_AGENT_STR: &str = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36";
+const DEFAULT_MODEL: &str = "gpt-4o-mini";
+const CHAT_URL: &str = "https://duckduckgo.com/duckchat/v1/chat";
 
 /// A client for duck duck go's ai features.
 #[derive(Debug, Clone)]
@@ -47,19 +49,18 @@ impl Client {
 
         Ok(ChatRequest {
             messages: Vec::new(),
-            model: "gpt-3.5-turbo-0125".into(),
+            model: DEFAULT_MODEL.into(),
             vqd: Some(vqd),
         })
     }
 
     /// Chat with an AI.
     pub async fn chat(&self, request: &ChatRequest) -> Result<ChatResponseStream, Error> {
-        let url = "https://duckduckgo.com/duckchat/v1/chat";
-
+        let vqd = request.vqd.as_deref().ok_or(Error::MissingVqd)?;
         let response = self
             .client
-            .post(url)
-            .header("x-vqd-4", request.vqd.as_deref().ok_or(Error::MissingVqd)?)
+            .post(CHAT_URL)
+            .header("x-vqd-4", vqd)
             .json(request)
             .send()
             .await?
