@@ -1,6 +1,18 @@
 # duck-duck-go-ai-rs
 A small API for Duck Duck Go's AI features.
 
+## Python Binding
+This repository has a small Python binding.
+
+### Example
+```
+import duck_duck_go_ai_py as duckai
+
+chat = duckai.Chat()
+
+
+```
+
 ## License
 Licensed under either of
  * Apache License, Version 2.0 (LICENSE-APACHE or http://www.apache.org/licenses/LICENSE-2.0)

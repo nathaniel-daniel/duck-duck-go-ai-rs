@@ -36,8 +36,8 @@ impl Chat {
 #[pymethods]
 impl Chat {
     /// Create a new chat.
-    #[staticmethod]
-    pub fn init() -> PyResult<Self> {
+    #[new]
+    pub fn new() -> PyResult<Self> {
         let tokio_rt = TOKIO_RUNTIME
             .as_ref()
             .context("failed to init tokio runtime")?;
