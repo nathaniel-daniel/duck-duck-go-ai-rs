@@ -54,7 +54,7 @@ impl Chat {
     /// Get the model.
     pub fn get_model<'a>(&self, py: Python<'a>) -> PyResult<Bound<'a, PyString>> {
         let chat_request = self.get_chat_request().context("chat is busy")?;
-        Ok(PyString::new_bound(py, chat_request.model.as_str()))
+        Ok(PyString::new(py, chat_request.model.as_str()))
     }
 
     /// Set the model.
@@ -102,8 +102,8 @@ impl Chat {
             }
         };
 
-        let role = PyString::new_bound(py, message.role.as_str());
-        let content = PyString::new_bound(py, message.content.as_str());
+        let role = PyString::new(py, message.role.as_str());
+        let content = PyString::new(py, message.content.as_str());
 
         Ok(Some((role, content)))
     }
@@ -256,7 +256,7 @@ impl ChatResponseStream {
         slf.rx
             .blocking_recv()
             .transpose()
-            .map(|token| token.map(|token| PyString::new_bound(py, &token)))
+            .map(|token| token.map(|token| PyString::new(py, &token)))
             .map_err(Into::into)
     }
 }
