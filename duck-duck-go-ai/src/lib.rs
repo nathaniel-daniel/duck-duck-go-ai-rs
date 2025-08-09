@@ -36,6 +36,10 @@ pub enum Error {
     /// Missing Vqd
     #[error("missing vqd")]
     MissingVqd,
+
+    /// Failed to solve challenge
+    #[error("failed to solve challenge")]
+    Solve(#[from] self::client::SolveError),
 }
 
 #[cfg(test)]

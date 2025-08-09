@@ -1,3 +1,6 @@
+mod challenge;
+
+pub use self::challenge::SolveError;
 use crate::ChatRequest;
 use crate::ChatResponseStream;
 use crate::Error;
@@ -41,16 +44,20 @@ impl Client {
             .error_for_status()?;
         let vqd = response
             .headers()
-            .get("x-vqd-4")
+            .get("x-vqd-hash-1")
             .and_then(|header| header.to_str().ok())
             .ok_or(Error::MissingVqd)?
             .to_string();
         let _text = response.text().await?;
 
+        let solved_vqd =
+            tokio::task::spawn_blocking(move || self::challenge::solve(USER_AGENT_STR, &vqd))
+                .await??;
+
         Ok(ChatRequest {
             messages: Vec::new(),
             model: DEFAULT_MODEL.into(),
-            vqd: Some(vqd),
+            vqd: Some(solved_vqd),
         })
     }
 
@@ -60,7 +67,7 @@ impl Client {
         let response = self
             .client
             .post(CHAT_URL)
-            .header("x-vqd-4", vqd)
+            .header("x-vqd-hash-1", vqd)
             .json(request)
             .send()
             .await?
